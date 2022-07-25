@@ -1,0 +1,44 @@
+{
+    "compilerOptions": {
+      "experimentalDecorators": true,
+      "target": "esnext",
+      "useDefineForClassFields": true,
+      "module": "esnext",
+      "moduleResolution": "node",
+      "strict": true,
+      "jsx": "react",
+      "sourceMap": true,
+      "resolveJsonModule": true,
+      "isolatedModules": false,
+      "esModuleInterop": true,
+      "lib": ["esnext", "dom"],
+      "skipLibCheck": true,
+      "baseUrl": ".",
+      "types": ["node","webpack"],
+      "typeRoots": ["node_modules/@types"],
+      "paths": {
+        "@/*": ["src/*"],
+        "@views/*": ["src/views/*"],
+      }
+    },
+    "ts-node": {
+      "compilerOptions": {
+        "module": "CommonJs"
+      }
+    },
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.d.ts",
+      "src/**/*.tsx",
+      "src/**/*.vue",
+      "build/**/*.ts",
+      "build/**/*.d.ts",
+      "types/**/*.d.ts",
+      "types/**/*.ts",
+      "mock/**/*.ts",
+      "vite.config.ts",
+      "components.d.ts"
+    ],
+    "exclude": ["node_modules", "dist", "**/*.js"]
+  }
+  
