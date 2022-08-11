@@ -1,9 +1,10 @@
 import React from "react";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, MenuProps } from "antd";
 import { observer } from "mobx-react";
 import { appStores } from "@/stores";
 import { contentRoutes } from "@/routers/routes";
 import "./index.less";
+import { useNavigate } from "react-router-dom";
 
 const menusMap = (routes: any) => {
   return routes
@@ -27,6 +28,11 @@ const menusMap = (routes: any) => {
 const Sider = () => {
   const { Sider } = Layout;
   const { global } = appStores();
+  const navigate = useNavigate();
+  const onClick: MenuProps["onClick"] = (e) => {
+    console.log("click", e);
+    navigate(e.key);
+  };
 
   return (
     <Sider
@@ -37,6 +43,7 @@ const Sider = () => {
     >
       <div className="logo" />
       <Menu
+        onClick={onClick}
         theme="dark"
         mode="inline"
         defaultSelectedKeys={["/dashboard"]}

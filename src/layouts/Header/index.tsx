@@ -4,13 +4,17 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import "./index.less";
 import { observer } from "mobx-react";
 import { appStores } from "@/stores";
+import RightContent from "./components/RightContent";
 
 const Header = () => {
   const { global } = appStores();
   const { Header } = Layout;
 
   return (
-    <Header className="header-component site-layout-background" style={{ padding: 0 }}>
+    <Header
+      className="header-component site-layout-background"
+      style={{ padding: 0 }}
+    >
       {React.createElement(
         global.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
         {
@@ -18,6 +22,7 @@ const Header = () => {
           onClick: () => global.toggleCollapsed(!global.collapsed),
         }
       )}
+      <RightContent />
     </Header>
   );
 };

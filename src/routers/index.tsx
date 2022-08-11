@@ -1,8 +1,6 @@
 import React, { Suspense } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-
 import routes from "./routes";
-
 /* ts todo */
 const renderRoutes = (routes: Array<any>) => {
   return routes.map((route: any, index: number) => {

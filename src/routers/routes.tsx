@@ -20,6 +20,12 @@ export const contentRoutes = [
     icon: <SmileOutlined />,
     component: lazy(() => import("@/views/Dashboard")),
   },
+  {
+    path: "/json-editor",
+    name: "JSON编辑器",
+    icon: <SmileOutlined />,
+    component: lazy(() => import("@/views/JsonEditor")),
+  },
   /* {
     path: '/welcome',
     name: '欢迎页',

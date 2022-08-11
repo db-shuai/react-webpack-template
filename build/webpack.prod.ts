@@ -2,8 +2,9 @@ import webpack from "webpack";
 import { merge } from "webpack-merge";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
-
-// import WebpackBundleAnalyzer from "webpack-bundle-analyzer";
+// import {  DllReferencePlugin } from "webpack";
+import SpeedMeasurePlugin from 'speed-measure-webpack-plugin';
+import WebpackBundleAnalyzer from "webpack-bundle-analyzer";
 
 import commonConfig from "./webpack.base";
 
@@ -11,10 +12,15 @@ let config = merge(commonConfig, {
   mode: "production",
   plugins: [
     new CleanWebpackPlugin(),
-    new MiniCssExtractPlugin({
-      filename: "[name].[contenthash:8].css",
-      chunkFilename: "chunk/[id].[contenthash:8].css",
-    }),
+    // new MiniCssExtractPlugin({
+    //   filename: "[name].[contenthash:8].css",
+    //   chunkFilename: "chunk/[id].[contenthash:8].css",
+    // }),
+    // new DllReferencePlugin({
+    //   // 描述 react 动态链接库的文件内容
+    //   manifest: require('../dist/react.manifest.json'),
+    // }),
+
     new webpack.ids.HashedModuleIdsPlugin(),
   ],
   // optimization: {
@@ -67,9 +73,12 @@ if (process.env.npm_lifecycle_event === "build:watch") {
     devtool: "cheap-source-map",
   });
 }
-// if (process.env.npm_lifecycle_event === 'build:report') {
-//   const BundleAnalyzerPlugin = WebpackBundleAnalyzer.BundleAnalyzerPlugin;
-//   config.plugins.push(new BundleAnalyzerPlugin());
-// }
+if (process.env.npm_lifecycle_event === 'build:report') {
+  const BundleAnalyzerPlugin = WebpackBundleAnalyzer.BundleAnalyzerPlugin;
+  config?.plugins?.push(new BundleAnalyzerPlugin());
+}
 
-export default config;
+const smp = new SpeedMeasurePlugin();
+
+
+export default smp.wrap(config as any);

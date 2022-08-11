@@ -4,10 +4,7 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 // import AntdDayjsWebpackPlugin from 'antd-dayjs-webpack-plugin'
-// import os from 'os'
-// import HappyPack from 'happypack'
 
-// const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 const srcDir = path.join(__dirname, "../src");
 const devMode = process.env.NODE_ENV !== "production";
 const baseConfig: Configuration = {
@@ -35,19 +32,22 @@ const baseConfig: Configuration = {
       // },
       {
         test: /\.(ts|tsx)?$/,
-        use: ["ts-loader"],
+        use: [
+          "ts-loader",
+          {
+            loader: "thread-loader",
+            options: {
+              workerParallelJobs: 2,
+            },
+          },
+        ],
         exclude: /node_modules/,
       },
-      // {
-      //   test: /\.(js|jsx)$/,
-      //   include: [srcDir],
-      //   exclude: /(node_modules|bower_components)/,
-      //   use: ['happypack/loader?id=happybabel'],
-      // },
       {
         test: /\.less$/,
         use: [
-          devMode ? "style-loader" : MiniCssExtractPlugin.loader,
+          "style-loader",
+          // devMode ? "style-loader" : MiniCssExtractPlugin.loader,
           "css-loader",
           "postcss-loader",
           "less-loader",
@@ -56,7 +56,8 @@ const baseConfig: Configuration = {
       {
         test: /\.css$/,
         use: [
-          devMode ? "style-loader" : MiniCssExtractPlugin.loader,
+          "style-loader",
+          // devMode ? "style-loader" : MiniCssExtractPlugin.loader,
           "css-loader",
           "postcss-loader",
         ],
@@ -79,14 +80,6 @@ const baseConfig: Configuration = {
     ],
   },
   plugins: [
-    // 开启 happypack 的线程池
-    // new HappyPack({
-    //   id: 'happybabel',
-    //   loaders: ['babel-loader?cacheDirectory=true'],
-    //   threadPool: happyThreadPool,
-    //   // cache: true,
-    //   verbose: true,
-    // }),
     new HtmlWebpackPlugin({
       template: `${srcDir}/index.html`,
     }),
@@ -113,5 +106,8 @@ const baseConfig: Configuration = {
   //   mergeDuplicateChunks: true // 合并重复的chunk (默认 true)
   // }
 };
+import SpeedMeasurePlugin from "speed-measure-webpack-plugin";
+
+const smp = new SpeedMeasurePlugin();
 
 export default baseConfig;

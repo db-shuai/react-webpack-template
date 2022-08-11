@@ -4,7 +4,7 @@ export default class Global {
   constructor() {
     makeAutoObservable(this);
   }
-  
+
   @observable collapsed = false;
 
   @action.bound toggleCollapsed(collapsed: boolean) {
