@@ -30,6 +30,7 @@ specifiers:
   postcss-loader: ^7.0.0
   react: ^18.2.0
   react-dom: ^18.2.0
+  react-infinite-scroll-component: ^6.1.0
   react-router-dom: ^6.3.0
   react-split: ^2.0.14
   speed-measure-webpack-plugin: ^1.5.0
@@ -79,6 +80,7 @@ devDependencies:
   less-loader: registry.npmjs.org/less-loader/11.0.0_less@4.1.3+webpack@5.73.0
   mini-css-extract-plugin: registry.npmjs.org/mini-css-extract-plugin/2.6.1_webpack@5.73.0
   postcss-loader: registry.npmjs.org/postcss-loader/7.0.0_webpack@5.73.0
+  react-infinite-scroll-component: 6.1.0_react@18.2.0
   speed-measure-webpack-plugin: 1.5.0_webpack@5.73.0
   style-loader: registry.npmjs.org/style-loader/3.3.1_webpack@5.73.0
   thread-loader: 3.0.4_webpack@5.73.0
@@ -712,6 +714,15 @@ packages:
       safe-buffer: 5.2.1
     dev: true
 
+  /react-infinite-scroll-component/6.1.0_react@18.2.0:
+    resolution: {integrity: sha512-SQu5nCqy8DxQWpnUVLx7V7b7LcA37aM7tvoWjTLZp1dk6EJibM5/4EJKzOnl07/BsM1Y40sKLuqjCwwH/xV0TQ==}
+    peerDependencies:
+      react: '>=16.0.0'
+    dependencies:
+      react: registry.npmjs.org/react/18.2.0
+      throttle-debounce: 2.3.0
+    dev: true
+
   /react-is/16.13.1:
     resolution: {integrity: sha1-eJcppNw23imZ3BVt1sHZwYzqVqQ=}
     dev: false
@@ -846,6 +857,11 @@ packages:
       neo-async: 2.6.2
       schema-utils: 3.1.1
       webpack: registry.npmjs.org/webpack/5.73.0_webpack-cli@4.10.0
+    dev: true
+
+  /throttle-debounce/2.3.0:
+    resolution: {integrity: sha1-/TGGXmZQIHHkEYF+JBRls+nDcuI=}
+    engines: {node: '>=8'}
     dev: true
 
   /to-fast-properties/2.0.0:
@@ -3918,7 +3934,6 @@ packages:
     hasBin: true
     dependencies:
       js-tokens: registry.npmjs.org/js-tokens/4.0.0
-    dev: false
 
   registry.npmjs.org/lower-case/2.0.2:
     resolution: {integrity: sha512-7fm3l3NAF9WfN6W3JOmf5drwpVqX78JtoGJ3A6W0a6ZnldM41w2fV5D490psKFTpMds8TJse/eHLFFsNHHjHgg==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/lower-case/-/lower-case-2.0.2.tgz}
@@ -5351,7 +5366,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: registry.npmjs.org/loose-envify/1.4.0
-    dev: false
 
   registry.npmjs.org/readable-stream/2.3.7:
     resolution: {integrity: sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.7.tgz}

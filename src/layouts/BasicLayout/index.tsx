@@ -19,6 +19,7 @@ const BasicLayout: React.FC = () => {
             margin: "12px 10px",
             padding: 12,
             minHeight: 280,
+            height: "100%",
           }}
         >
           <Outlet />
@@ -28,4 +29,4 @@ const BasicLayout: React.FC = () => {
   );
 };
 
-export default BasicLayout
+export default BasicLayout;

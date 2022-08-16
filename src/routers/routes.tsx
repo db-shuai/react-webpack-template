@@ -26,6 +26,12 @@ export const contentRoutes = [
     icon: <SmileOutlined />,
     component: lazy(() => import("@/views/JsonEditor")),
   },
+  {
+    path: "/virtual-scroll",
+    name: "虚拟滚动",
+    icon: <SmileOutlined />,
+    component: lazy(() => import("@/views/VirtualScroll")),
+  },
   /* {
     path: '/welcome',
     name: '欢迎页',
