@@ -27,6 +27,12 @@ export const contentRoutes = [
     component: lazy(() => import("@/views/JsonEditor")),
   },
   {
+    path: "/slice-render",
+    name: "分片渲染",
+    icon: <SmileOutlined />,
+    component: lazy(() => import("@/views/SliceRender")),
+  },
+  {
     path: "/virtual-scroll",
     name: "虚拟滚动",
     icon: <SmileOutlined />,

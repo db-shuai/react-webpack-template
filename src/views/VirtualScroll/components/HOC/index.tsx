@@ -1,38 +1,105 @@
-import React, { useEffect, useState } from "react";
-
-let waitList: any = []; //等待队列
+import React, { useEffect, useRef } from "react";
+import useReactive from "@/hooks/useReactive";
+import useEventListener from "@/hooks/useEventListener";
+import useCreation from "@/hooks/useCreation";
 
 const HOC =
   (Component: any) =>
   ({ list, ...props }: any) => {
-    const [data, setData] = useState<any>([]);
+    const state = useReactive({
+      data: [], //渲染的数据
+      scrollAllHeight: "100vh", // 容器的初始高度
+      listHeight: 0, //列表高度
+      itemHeight: 0, // 子组件的高度
+      renderCount: 0, // 需要渲染的数量
+      bufferCount: 6, // 缓冲的个数
+      start: 0, // 起始索引
+      end: 0, // 终止索引
+      currentOffset: 0, // 偏移量
+    });
+
+    const allRef = useRef<any>(null); // 容器的ref
+    const scrollRef = useRef<any>(null); // 检测滚动
 
     useEffect(() => {
-      if (list.length !== 0) {
-        sliceTime(list, 0);
-      }
-    }, [list]);
+      // 子列表高度
+      const ItemHeight = 65;
 
-    const sliceTime = (list: any[], times = 0, number: number = 100) => {
-      console.log("list: ", list.length, times, number);
+      // 容器的高度
+      const scrollAllHeight = allRef.current.offsetHeight;
 
-      if (times === Math.ceil(list.length / number) + 1) return; //判断条件
-      setTimeout(() => {
-        const newList: any = list.slice(times * number, (times + 1) * number);
-        waitList = [...waitList, ...newList];
-        setData(waitList);
-        sliceTime(list, times + 1);
-      }, 500);
-    };
+      // 列表高度
+      const listHeight = ItemHeight * list.length;
+      //渲染节点的数量
+      const renderCount =
+        Math.ceil(scrollAllHeight / ItemHeight) + state.bufferCount;
 
-    if (list.length === 0) return <></>;
+      state.renderCount = renderCount;
+      state.end = renderCount + 1;
+      state.listHeight = listHeight;
+      state.itemHeight = ItemHeight;
+      state.data = list.slice(state.start, state.end);
+    }, [allRef]);
+
+    useCreation(() => {
+      state.data = list.slice(state.start, state.end);
+    }, [state.start]);
+
+    useEventListener(
+      "scroll",
+      () => {
+        // 顶部高度
+        const { scrollTop } = scrollRef.current;
+        state.start = Math.floor(scrollTop / state.itemHeight);
+        state.end = Math.floor(
+          scrollTop / state.itemHeight + state.renderCount + 1
+        );
+        state.currentOffset = scrollTop - (scrollTop % state.itemHeight);
+        // state.data = list.slice(state.start, state.end)
+      },
+      scrollRef
+    );
 
     return (
-      <>
-        {data.map((item: any) => (
-          <Component id={item} {...props} key={item} />
-        ))}
-      </>
+      <div ref={allRef}>
+        <div
+          style={{
+            height: state.scrollAllHeight,
+            overflow: "scroll",
+            position: "relative",
+          }}
+          ref={scrollRef}
+        >
+          {/* 占位，列表的总高度，用于生成滚动条 */}
+          <div
+            style={{
+              height: state.listHeight,
+              position: "absolute",
+              left: 0,
+              top: 0,
+              right: 0,
+            }}
+          ></div>
+          {/* 内容区域 */}
+          <div
+            style={{
+              transform: `translate3d(0, ${state.currentOffset}px, 0)`,
+              position: "relative",
+              left: 0,
+              top: 0,
+              right: 0,
+            }}
+          >
+            {/* 渲染区域 */}
+            {state.data.map((item: any) => (
+              <div key={item}>
+                {/* 子组件 */}
+                <Component id={item} {...props} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     );
   };
 

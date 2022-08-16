@@ -1,41 +1,38 @@
-import React, { useEffect, useState } from "react";
-import img from "./img.png";
-import SlicingHoc from "./components/HOC";
+import React,{ useEffect, useState } from 'react';
+import img from './img.png'
+import HOC from './components/HOC';
 
-const Item: React.FC<{ id: number }> = ({ id }) => {
+// 子组件
+const Item:React.FC<{id: any}> = ({id}) => {
+
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center ",
-        marginBottom: "5px",
-      }}
-    >
-      <img src={img} width={80} height={60} alt="" />
-      列表{id}
+    <div style={{display: 'flex', alignItems: 'center', padding: 5}}>
+      <img src={img} width={80} height={60} alt="" />列表{id}
     </div>
-  );
-};
+  )
+}
 
-const ItemHoc = SlicingHoc(Item);
+const ItemHoc = HOC(Item)
 
-const Index: React.FC = (props) => {
-  const [list, setList] = useState<Array<number>>([]);
+const Index:React.FC<any> = (props)=> {
+
+  const [list, setList] = useState<Array<number>>([])
 
   useEffect(() => {
-    let arr: number[] = [];
-    for (let i = 0; i < 1010; i++) {
-      arr.push(i);
+    let arr:number[] = [] 
+    for(let i = 0; i < 500; i++){
+      arr.push(i)
     }
-    setList(arr);
-  }, []);
+    setList(arr)
+  }, [])
+
+  if(list.length === 0) return <></>
 
   return (
     <div>
       <ItemHoc list={list} />
-    </div>
+   </div>
   );
-};
+}
 
 export default Index;
