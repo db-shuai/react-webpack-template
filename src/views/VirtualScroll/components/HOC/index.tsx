@@ -1,41 +1,39 @@
-import { useEffect, useState } from "react";
-import { Spin } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-const waitList: any = []; //等待队列
-let isRender: boolean = false; //控制渲染条件
+let waitList: any = []; //等待队列
 
-const waitRender = () => {
-  const res = waitList.shift();
-  if (!res) return;
-  setTimeout(() => {
-    res();
-  }, 500); //为演示效果加入一个延长时间
-};
+const HOC =
+  (Component: any) =>
+  ({ list, ...props }: any) => {
+    const [data, setData] = useState<any>([]);
 
-const HOC = (Component: any) => (props: any) => {
-  const [show, setShow] = useState<boolean>(false);
+    useEffect(() => {
+      if (list.length !== 0) {
+        sliceTime(list, 0);
+      }
+    }, [list]);
 
-  useEffect(() => {
-    console.log("waitList: ", waitList);
-    waitList.push(() => {
-      setShow(true);
-    });
-    if (!isRender) {
-      console.log("props: ", props);
-      waitRender();
-      isRender = true;
-    }
-  }, []);
+    const sliceTime = (list: any[], times = 0, number: number = 100) => {
+      console.log("list: ", list.length, times, number);
 
-  return show ? (
-    <Component waitRender={waitRender} {...props} />
-  ) : (
-    <div style={{ margin: 25 }}>
-      <Spin />
-      加载中
-    </div>
-  );
-};
+      if (times === Math.ceil(list.length / number) + 1) return; //判断条件
+      setTimeout(() => {
+        const newList: any = list.slice(times * number, (times + 1) * number);
+        waitList = [...waitList, ...newList];
+        setData(waitList);
+        sliceTime(list, times + 1);
+      }, 500);
+    };
+
+    if (list.length === 0) return <></>;
+
+    return (
+      <>
+        {data.map((item: any) => (
+          <Component id={item} {...props} key={item} />
+        ))}
+      </>
+    );
+  };
 
 export default HOC;
