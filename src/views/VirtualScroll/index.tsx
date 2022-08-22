@@ -1,13 +1,14 @@
 import React,{ useEffect, useState } from 'react';
-import img from './img.png'
 import HOC from './components/HOC';
+import Mock from 'mockjs';
+
 
 // 子组件
-const Item:React.FC<{id: any}> = ({id}) => {
+const Item:React.FC<{id: any, index?:number}> = ({id, index}) => {
 
   return (
-    <div style={{display: 'flex', alignItems: 'center', padding: 5}}>
-      <img src={img} width={80} height={60} alt="" />列表{id}
+    <div style={{display: 'flex', alignItems: 'center', padding: 5, lineHeight: '24px', border: '1px solid #ccc'}}>
+     列表{index}: {id}
     </div>
   )
 }
@@ -16,13 +17,17 @@ const ItemHoc = HOC(Item)
 
 const Index:React.FC<any> = (props)=> {
 
-  const [list, setList] = useState<Array<number>>([])
+  const [list, setList] = useState<any>([])
 
   useEffect(() => {
-    let arr:number[] = [] 
-    for(let i = 0; i < 500; i++){
-      arr.push(i)
+    let arr:any[] = [] 
+    for(let i = 0; i < 100; i++){
+      arr.push({
+        id: i,
+        content: Mock.mock('@csentence(40, 100)')
+      })
     }
+
     setList(arr)
   }, [])
 

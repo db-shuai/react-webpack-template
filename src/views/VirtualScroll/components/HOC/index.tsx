@@ -5,8 +5,8 @@ import useCreation from "@/hooks/useCreation";
 
 const HOC =
   (Component: any) =>
-  ({ list, ...props }: any) => {
-    const state = useReactive({
+  ({ list, onRequest, ...props }: any) => {
+    const state = useReactive<any>({
       data: [], //渲染的数据
       scrollAllHeight: "100vh", // 容器的初始高度
       listHeight: 0, //列表高度
@@ -16,49 +16,152 @@ const HOC =
       start: 0, // 起始索引
       end: 0, // 终止索引
       currentOffset: 0, // 偏移量
+      positions: [
+        //需要记录每一项的高度
+        // index         // 当前pos对应的元素的下标
+        // top;          // 顶部位置
+        // bottom        // 底部位置
+        // height        // 元素高度
+        // dHeight        // 用于判断是否需要改变
+      ],
+      initItemHeight: 50, // 预计高度
     });
 
     const allRef = useRef<any>(null); // 容器的ref
     const scrollRef = useRef<any>(null); // 检测滚动
+    const ref = useRef<any>(null); // 检测滚动
 
     useEffect(() => {
-      // 子列表高度
-      const ItemHeight = 65;
+      // 初始高度
+      initPositions();
+    }, []);
 
-      // 容器的高度
+    const initPositions = () => {
+      const data = [];
+      for (let i = 0; i < list.length; i++) {
+        data.push({
+          index: i,
+          height: state.initItemHeight,
+          top: i * state.initItemHeight,
+          bottom: (i + 1) * state.initItemHeight,
+          dHeight: 0,
+        });
+      }
+      state.positions = [...data];
+    };
+
+    useEffect(() => {
+      // 子列表高度：为默认的预计高度
+      const ItemHeight = state.initItemHeight;
+
+      // // 容器的高度
       const scrollAllHeight = allRef.current.offsetHeight;
 
-      // 列表高度
-      const listHeight = ItemHeight * list.length;
+      // 列表高度：positions最后一项的bottom
+      const listHeight = state.positions[state.positions.length - 1].bottom;
+
       //渲染节点的数量
-      const renderCount =
-        Math.ceil(scrollAllHeight / ItemHeight) + state.bufferCount;
+      const renderCount = Math.ceil(scrollAllHeight / ItemHeight);
 
       state.renderCount = renderCount;
       state.end = renderCount + 1;
       state.listHeight = listHeight;
       state.itemHeight = ItemHeight;
       state.data = list.slice(state.start, state.end);
-    }, [allRef]);
+    }, [allRef, list.length]);
+
+    useEffect(() => {
+      setPostition();
+    }, [ref.current]);
+
+    const setPostition = () => {
+      const nodes = ref.current.childNodes;
+      if (nodes.length === 0) return;
+      nodes.forEach((node: HTMLDivElement) => {
+        if (!node) return;
+        const rect = node.getBoundingClientRect(); // 获取对应的元素信息
+        const index = +node.id; // 可以通过id，来取到对应的索引
+        const oldHeight = state.positions[index].height; // 旧的高度
+        const dHeight = oldHeight - rect.height; // 差值
+        if (dHeight) {
+          state.positions[index].height = rect.height; //真实高度
+          state.positions[index].bottom =
+            state.positions[index].bottom - dHeight;
+          state.positions[index].dHeight = dHeight; //将差值保留
+        }
+      });
+
+      //  重新计算整体的高度
+      const startId = +nodes[0].id;
+
+      const positionLength = state.positions.length;
+      let startHeight = state.positions[startId].dHeight;
+      state.positions[startId].dHeight = 0;
+
+      for (let i = startId + 1; i < positionLength; ++i) {
+        const item = state.positions[i];
+        state.positions[i].top = state.positions[i - 1].bottom;
+        state.positions[i].bottom = state.positions[i].bottom - startHeight;
+        if (item.dHeight !== 0) {
+          startHeight += item.dHeight;
+          item.dHeight = 0;
+        }
+      }
+
+      // 重新计算子列表的高度
+      state.itemHeight = state.positions[positionLength - 1].bottom;
+    };
 
     useCreation(() => {
       state.data = list.slice(state.start, state.end);
-    }, [state.start]);
+
+      if (ref.current) {
+        setPostition();
+      }
+    }, [state.end]);
 
     useEventListener(
       "scroll",
       () => {
         // 顶部高度
-        const { scrollTop } = scrollRef.current;
-        state.start = Math.floor(scrollTop / state.itemHeight);
-        state.end = Math.floor(
-          scrollTop / state.itemHeight + state.renderCount + 1
-        );
-        state.currentOffset = scrollTop - (scrollTop % state.itemHeight);
-        // state.data = list.slice(state.start, state.end)
+        const { scrollTop, clientHeight, scrollHeight } = scrollRef.current;
+        state.start = binarySearch(state.positions, scrollTop);
+        state.end = state.start + state.renderCount + 1;
+
+        // 计算偏移量
+        state.currentOffset =
+          state.start > 0 ? state.positions[state.start - 1].bottom : 0;
+
+        // 滚动条距离的高度
+        const button = scrollHeight - clientHeight - scrollTop;
+        if (button === 0 && onRequest) {
+          onRequest();
+        }
       },
       scrollRef
     );
+
+    // 二分查找
+    const binarySearch = (list: any[], value: any) => {
+      let start: number = 0;
+      let end: number = list.length - 1;
+      let tempIndex = null;
+      while (start <= end) {
+        let midIndex = parseInt(String((start + end) / 2));
+        let midValue = list[midIndex].bottom;
+        if (midValue === value) {
+          return midIndex + 1;
+        } else if (midValue < value) {
+          start = midIndex + 1;
+        } else if (midValue > value) {
+          if (tempIndex === null || tempIndex > midIndex) {
+            tempIndex = midIndex;
+          }
+          end = end - 1;
+        }
+      }
+      return tempIndex;
+    };
 
     return (
       <div ref={allRef}>
@@ -82,6 +185,7 @@ const HOC =
           ></div>
           {/* 内容区域 */}
           <div
+            ref={ref}
             style={{
               transform: `translate3d(0, ${state.currentOffset}px, 0)`,
               position: "relative",
@@ -92,9 +196,9 @@ const HOC =
           >
             {/* 渲染区域 */}
             {state.data.map((item: any) => (
-              <div key={item}>
+              <div id={String(item.id)} key={item.id}>
                 {/* 子组件 */}
-                <Component id={item} {...props} />
+                <Component id={item.content} {...props} index={item.id} />
               </div>
             ))}
           </div>
