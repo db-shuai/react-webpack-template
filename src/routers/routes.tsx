@@ -11,32 +11,45 @@ import {
 } from "@ant-design/icons";
 
 import BasicLayout from "@/layouts/BasicLayout";
-// import BlankLayout from "@/layouts/BlankLayout";
+import BlankLayout from "@/layouts/BlankLayout";
 
 export const contentRoutes = [
   {
-    path: "/dashboard",
+    path: "dashboard",
     name: "首页",
-    icon: <SmileOutlined />,
+    icon: <HomeOutlined />,
     component: lazy(() => import("@/views/Dashboard")),
   },
   {
-    path: "/json-editor",
+    path: "json-editor",
     name: "JSON编辑器",
     icon: <SmileOutlined />,
     component: lazy(() => import("@/views/JsonEditor")),
   },
   {
-    path: "/slice-render",
+    path: "slice-render",
     name: "分片渲染",
     icon: <SmileOutlined />,
     component: lazy(() => import("@/views/SliceRender")),
   },
   {
-    path: "/virtual-scroll",
+    path: "virtual-scroll",
     name: "虚拟滚动",
     icon: <SmileOutlined />,
     component: lazy(() => import("@/views/VirtualScroll")),
+  },
+  {
+    path: "fun-test",
+    name: "测试",
+    icon: <SmileOutlined />,
+    component: BlankLayout,
+    children: [
+      {
+        path: "async-com",
+        name: "测试啊",
+        component: lazy(() => import("@/views/FunTest")),
+      },
+    ],
   },
   /* {
     path: '/welcome',

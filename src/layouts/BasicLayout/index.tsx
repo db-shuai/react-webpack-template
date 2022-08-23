@@ -14,7 +14,6 @@ const BasicLayout: React.FC = () => {
       <Layout className="site-layout">
         <Header />
         <Content
-          className="site-layout-background"
           style={{
             margin: "12px 10px",
             padding: 12,

@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { appStores } from "@/stores";
 import { contentRoutes } from "@/routers/routes";
 import "./index.less";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const menusMap = (routes: any) => {
   return routes
@@ -31,7 +31,8 @@ const Sider = () => {
   const navigate = useNavigate();
   const onClick: MenuProps["onClick"] = (e) => {
     console.log("click", e);
-    navigate(e.key);
+    
+    navigate(e.keyPath.reverse().join('/'));
   };
 
   return (

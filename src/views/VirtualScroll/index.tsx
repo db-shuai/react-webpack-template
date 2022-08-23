@@ -1,7 +1,9 @@
-import React,{ useEffect, useState } from 'react';
+// https://juejin.cn/post/7121551701731409934#heading-0
+
+
+import React, { useEffect, useState } from 'react';
 import HOC from './components/HOC';
 import Mock from 'mockjs';
-
 
 // 子组件
 const Item:React.FC<{id: any, index?:number}> = ({id, index}) => {
