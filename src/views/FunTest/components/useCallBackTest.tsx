@@ -5,7 +5,6 @@ const MockMemo: React.FC<any> = () => {
   const [show, setShow] = useState(true);
 
   const add = useCallback(() => {
-    console.log('useCallback: ');
     setCount(count + 1);
   }, [count]);
 

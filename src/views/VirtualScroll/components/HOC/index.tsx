@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import useReactive from "@/hooks/useReactive";
-import useEventListener from "@/hooks/useEventListener";
+import useEventListener from "@/hooks/useEventListenerPro";
 import useCreation from "@/hooks/useCreation";
 
 const HOC =

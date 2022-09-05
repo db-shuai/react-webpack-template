@@ -3,8 +3,10 @@ import { Card, Col, Row } from "antd";
 import AsyncComTest from "./components/AsyncCom";
 import PerformanceTest from "./components/Performance";
 import EventTest from "./components/Event";
-import UseCallBackTest from './components/useCallBackTest'
+import UseCallBackTest from "./components/useCallBackTest";
 import UseMemoTest from "./components/useMemoTest";
+import UseCreationTest from "./components/useCreationTest";
+import UseReactiveTest from "./components/useReactiveTest";
 
 const Index: React.FC = () => (
   <div className="site-card-wrapper">
@@ -32,6 +34,16 @@ const Index: React.FC = () => (
       <Col span={8}>
         <Card title="useCallback" bordered={false}>
           <UseCallBackTest />
+        </Card>
+      </Col>
+      <Col span={8}>
+        <Card title="useCreation" bordered={false}>
+          <UseCreationTest />
+        </Card>
+      </Col>
+      <Col span={8}>
+        <Card title="useReactive" bordered={false}>
+          <UseReactiveTest />
         </Card>
       </Col>
     </Row>
