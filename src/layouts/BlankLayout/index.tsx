@@ -5,9 +5,9 @@ import { Outlet } from "react-router-dom";
 //
 
 const BlankLayout = ({ children }: ReactPortal) => (
-  <div>
+  <>
     <Outlet />
-  </div>
+  </>
 );
 
 export default BlankLayout;

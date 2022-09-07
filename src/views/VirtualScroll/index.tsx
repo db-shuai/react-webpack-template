@@ -1,45 +1,37 @@
-// https://juejin.cn/post/7121551701731409934#heading-0
-
-
-import React, { useEffect, useState } from 'react';
-import HOC from './components/HOC';
-import Mock from 'mockjs';
+import React, { useEffect, useState } from "react";
+import img from "./img.png";
+import HOC from "./components/HOC";
 
 // 子组件
-const Item:React.FC<{id: any, index?:number}> = ({id, index}) => {
-
+const Item: React.FC<{ id: any }> = ({ id }) => {
   return (
-    <div style={{display: 'flex', alignItems: 'center', padding: 5, lineHeight: '24px', border: '1px solid #ccc'}}>
-     列表{index}: {id}
+    <div style={{ display: "flex", alignItems: "center", padding: 5 }}>
+      <img src={img} width={80} height={60} alt="" />
+      列表{id}
     </div>
-  )
-}
+  );
+};
 
-const ItemHoc = HOC(Item)
+const ItemHoc = HOC(Item);
 
-const Index:React.FC<any> = (props)=> {
-
-  const [list, setList] = useState<any>([])
+const Index: React.FC<any> = (props) => {
+  const [list, setList] = useState<Array<number>>([]);
 
   useEffect(() => {
-    let arr:any[] = [] 
-    for(let i = 0; i < 100; i++){
-      arr.push({
-        id: i,
-        content: Mock.mock('@csentence(40, 100)')
-      })
+    let arr: number[] = [];
+    for (let i = 0; i < 500; i++) {
+      arr.push(i);
     }
+    setList(arr);
+  }, []);
 
-    setList(arr)
-  }, [])
-
-  if(list.length === 0) return <></>
+  if (list.length === 0) return <></>;
 
   return (
     <div>
       <ItemHoc list={list} />
-   </div>
+    </div>
   );
-}
+};
 
 export default Index;

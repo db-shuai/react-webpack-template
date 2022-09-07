@@ -36,7 +36,19 @@ export const contentRoutes = [
     path: "virtual-scroll",
     name: "虚拟滚动",
     icon: <SmileOutlined />,
-    component: lazy(() => import("@/views/VirtualScroll")),
+    component: BlankLayout,
+    children: [
+      {
+        path: "fixed-height",
+        name: "固定高度",
+        component: lazy(() => import("@/views/VirtualScroll")),
+      },
+      {
+        path: "auto-height",
+        name: "自适应高度",
+        component: lazy(() => import("@/views/VirtualScrollPro")),
+      },
+    ],
   },
   {
     path: "fun-test",

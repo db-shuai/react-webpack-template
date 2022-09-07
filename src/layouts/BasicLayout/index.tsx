@@ -16,7 +16,6 @@ const BasicLayout: React.FC = () => {
         <Content
           style={{
             margin: "12px 10px",
-            padding: 12,
             minHeight: 280,
             height: "100%",
           }}
