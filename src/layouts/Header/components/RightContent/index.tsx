@@ -15,7 +15,7 @@ const RightContent = () => {
     switch (e.key) {
       case "logout":
         user.logout("111");
-        navigate('/login')
+        navigate("/login");
         break;
 
       default:
@@ -23,22 +23,17 @@ const RightContent = () => {
     }
   };
 
-  const menu = (
-    <Menu
-      onClick={handleMenuClick}
-      items={[
-        {
-          key: "logout",
-          label: "退出登录",
-          icon: <UserOutlined />,
-        },
-      ]}
-    />
-  );
+  const menus = [
+    {
+      label: "退出登录",
+      key: "logout",
+      icon: <UserOutlined />,
+    },
+  ];
 
   return (
     <div className="right-content">
-      <Dropdown overlay={menu}>
+      <Dropdown menu={{ onClick: handleMenuClick, items: menus }}>
         <Space>
           <Button type="text">{user.username}</Button>
         </Space>

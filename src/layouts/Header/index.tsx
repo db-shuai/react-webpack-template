@@ -12,7 +12,7 @@ const Header = () => {
 
   return (
     <Header
-      className="header-component site-layout-background"
+      className="site-layout-header site-layout-background"
       style={{ padding: 0 }}
     >
       {React.createElement(
