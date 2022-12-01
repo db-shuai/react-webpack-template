@@ -1,0 +1,74 @@
+@count: 8;
+@keyframes animX {
+  0% {
+    left: 0px;
+  }
+  100% {
+    left: 500px;
+  }
+}
+@keyframes animY {
+  0% {
+    top: 0px;
+  }
+  100% {
+    top: 200px;
+  }
+}
+@keyframes scale {
+  0% {
+    transform: scale(0.7);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.7);
+  }
+}
+
+.ball {
+  width: 80px;
+  height: 80px;
+  background-color:cadetblue;
+  border-radius: 50%;
+  position: absolute;
+  color: #fff;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+//8个圆,x和y轴动画加起来是20s , 20s/8 约等于 2.5s
+//每个球y轴动画延迟 从0递减2.5s,x轴与y相差动画时长的一半（10s/2）
+.animationFun(@circleCount,@animationTime,@circleIndex) {
+  @time: (@animationTime / @circleCount);
+  animation: animX (@animationTime / 2) cubic-bezier(0.36, 0, 0.64, 1)
+      (-@animationTime / 4) - @circleIndex* @time infinite alternate,
+    animY (@animationTime / 2) cubic-bezier(0.36, 0, 0.64, 1) -@circleIndex* @time
+      infinite alternate,
+    scale @animationTime cubic-bezier(0.36, 0, 0.64, 1) -@circleIndex* @time infinite
+      alternate;
+  font-size: var(--fontSize);
+}
+
+.balls(@n, @i: 1) when (@i =< @n) {
+  .ball@{i} {
+    .animationFun(@n, 30s, @i);
+  }
+  .balls(@n, (@i + 1));
+}
+.animation-wrapper {
+  --fontSize: 50px;
+  .balls(@count);
+}
+
+#lopp {
+  width: 500px;
+  height: 200px;
+  border: 2px solid #999;
+  border-radius: 50%;
+  position: absolute;
+  left: 50px;
+  top: 60px;
+}

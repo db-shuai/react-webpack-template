@@ -51,6 +51,37 @@ export const contentRoutes = [
     ],
   },
   {
+    path: "performance",
+    name: "性能",
+    icon: <SmileOutlined />,
+    component: BlankLayout,
+    children: [
+      {
+        path: "api",
+        name: "性能测量API",
+        component: lazy(() => import("@/views/Performance")),
+      },
+      {
+        path: "reflow",
+        name: "reflow检测",
+        component: lazy(() => import("@/views/Performance/reflow")),
+      },
+    ],
+  },
+  {
+    path: "animation",
+    name: "动画",
+    icon: <SmileOutlined />,
+    component: BlankLayout,
+    children: [
+      {
+        path: "rotate",
+        name: "旋转",
+        component: lazy(() => import("@/views/Animation/rotate")),
+      },
+    ],
+  },
+  {
     path: "fun-test",
     name: "测试",
     icon: <SmileOutlined />,

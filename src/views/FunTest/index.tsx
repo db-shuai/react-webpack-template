@@ -10,7 +10,7 @@ import UseReactiveTest from "./components/useReactiveTest";
 
 const Index: React.FC = () => (
   <div className="site-card-wrapper">
-    <Row gutter={16}>
+    <Row gutter={10}>
       <Col span={8}>
         <Card title="异步组件" bordered={false}>
           <AsyncComTest />

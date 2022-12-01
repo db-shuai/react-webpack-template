@@ -18,6 +18,8 @@ const BasicLayout: React.FC = () => {
             margin: "12px 10px",
             minHeight: 280,
             height: "100%",
+            overflowY: "auto",
+            overflowX: "hidden",
           }}
         >
           <Outlet />
